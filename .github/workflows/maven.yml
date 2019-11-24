@@ -22,9 +22,3 @@ jobs:
       with:
        coverageCommand: mvn jacoco:report --file pom.xml
        debug: true
-
-  coverage:
-    runs-on: ubuntu-latest
-    needs: [ build ]
-    steps:
-
