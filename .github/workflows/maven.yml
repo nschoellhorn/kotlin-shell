@@ -13,12 +13,16 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+    - name: Before build
+      env:
+        CC_TEST_REPORTER_ID: 84e73d26eaa0ab4463a8990afb35e1902db4e8e93e10257c9c42f375da533b9c
+      run: wget https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 -O cc-test-reporter && chmod +x cc-test-reporter && ./cc-test-reporter before-build
     - name: Build with Maven
       run: mvn -B clean package --file pom.xml -Dmaven.test.failure.ignore=true
-    - name: Test & publish code coverage
-      uses: paambaati/codeclimate-action@v2.3.0
+    - name: Generate coverage
+      run: mvn jacoco:report --file pom.xml
+    - name: Publish report
       env:
-       CC_TEST_REPORTER_ID: 84e73d26eaa0ab4463a8990afb35e1902db4e8e93e10257c9c42f375da533b9c
-      with:
-       coverageCommand: mvn jacoco:report --file pom.xml && ./cc-test-reporter format-coverage target/site/jacoco/jacoco.xml --input-type jacoco
-       debug: true
+        CC_TEST_REPORTER_ID: 84e73d26eaa0ab4463a8990afb35e1902db4e8e93e10257c9c42f375da533b9c
+        JACOCO_SOURCE_PATH: src/main/kotlin
+      run: ./cc-test-reporter format-coverage target/site/jacoco/jacoco.xml --input-type jacoco -d && ./cc-test-reporter upload-coverage -d
