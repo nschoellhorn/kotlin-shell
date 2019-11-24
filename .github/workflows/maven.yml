@@ -15,15 +15,16 @@ jobs:
         java-version: 1.8
     - name: Build with Maven
       run: mvn -B clean package --file pom.xml -Dmaven.test.failure.ignore=true
+    - name: Test & publish code coverage
+      uses: paambaati/codeclimate-action@v2.3.0
+      env:
+       CC_TEST_REPORTER_ID: 84e73d26eaa0ab4463a8990afb35e1902db4e8e93e10257c9c42f375da533b9c
+      with:
+       coverageCommand: mvn jacoco:report --file pom.xml
+       debug: true
 
   coverage:
     runs-on: ubuntu-latest
     needs: [ build ]
     steps:
-      - name: Test & publish code coverage
-        uses: paambaati/codeclimate-action@v2.3.0
-        env:
-          CC_TEST_REPORTER_ID: 84e73d26eaa0ab4463a8990afb35e1902db4e8e93e10257c9c42f375da533b9c
-        with:
-          coverageCommand: mvn jacoco:report
-          debug: true
+
