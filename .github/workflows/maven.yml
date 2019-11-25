@@ -27,4 +27,4 @@ jobs:
         JACOCO_SOURCE_PATH: src/main/kotlin
         GIT_BRANCH: $GITHUB_REF
         GIT_COMMIT_SHA: $GITHUB_SHA
-      run: ./cc-test-reporter format-coverage target/site/jacoco/jacoco.xml --input-type jacoco -d && ./cc-test-reporter upload-coverage -d
+      run: export GIT_BRANCH=$GITHUB_REF && export GIT_COMMIT_SHA=$GITHUB_SHA && ./cc-test-reporter format-coverage target/site/jacoco/jacoco.xml --input-type jacoco -d && ./cc-test-reporter upload-coverage -d
