@@ -27,4 +27,4 @@ jobs:
         JACOCO_SOURCE_PATH: src/main/kotlin
       run: export GIT_BRANCH=`echo $GITHUB_REF | cut -d '/' -f '3-'` && export GIT_COMMIT_SHA=$GITHUB_SHA && ./cc-test-reporter format-coverage target/site/jacoco/jacoco.xml --input-type jacoco -d && ./cc-test-reporter upload-coverage -d
     - name: Check test failures
-      run: failures=`grep '<<< FAILURE!' target/surefire-reports -r | wc -l` && if [[ failures -gt 0 ]]; then echo "gt 0"; else echo "Not gt 0"; fi
+      run: failures=`grep '<<< FAILURE!' target/surefire-reports -r | wc -l` && if [[ failures -gt 0 ]]; then exit 1; else exit 0; fi
