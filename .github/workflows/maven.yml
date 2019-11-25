@@ -26,3 +26,5 @@ jobs:
         CC_TEST_REPORTER_ID: 84e73d26eaa0ab4463a8990afb35e1902db4e8e93e10257c9c42f375da533b9c
         JACOCO_SOURCE_PATH: src/main/kotlin
       run: export GIT_BRANCH=`echo $GITHUB_REF | cut -d '/' -f '3-'` && export GIT_COMMIT_SHA=$GITHUB_SHA && ./cc-test-reporter format-coverage target/site/jacoco/jacoco.xml --input-type jacoco -d && ./cc-test-reporter upload-coverage -d
+    - name: Check test failures
+      run: failures=`grep '<<< FAILURE!' target/surefire-reports -r | wc -l` && if [ failures -gt 0 ]; then exit 1; else exit 0; fi
