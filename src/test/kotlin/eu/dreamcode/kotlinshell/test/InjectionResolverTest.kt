@@ -1,19 +1,39 @@
 package eu.dreamcode.kotlinshell.test
 
-import eu.dreamcode.kotlinshell.inject.findEasiestConstructor
-import eu.dreamcode.kotlinshell.test.fixtures.MultiConstructorClassFixture
-import eu.dreamcode.kotlinshell.test.utility.Global
-import kotlin.reflect.jvm.jvmErasure
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import eu.dreamcode.kotlinshell.inject.InjectionResolver
+import eu.dreamcode.kotlinshell.inject.TypeRegistry
+import eu.dreamcode.kotlinshell.test.fixtures.injectionresolver.NoArgsConstructorClass
+import kotlin.test.*
 
 class InjectionResolverTest {
 
-    @Test
-    fun `Constructor with least parameters is found as easiest constructor`() {
-        val constructor = findEasiestConstructor(Global.scanResult, MultiConstructorClassFixture::class)
-        assertEquals(1, constructor.parameters.size)
-        assertEquals(Int::class, constructor.parameters[0].type.jvmErasure)
+    private var typeRegistry = TypeRegistry()
+    private var injectionResolver = InjectionResolver(this.typeRegistry)
+
+    @BeforeTest
+    fun setUp() {
+        this.typeRegistry = TypeRegistry()
+        this.injectionResolver = InjectionResolver(this.typeRegistry)
     }
+
+    @Test
+    fun `Gives no-args-constructor if available`() {
+        val resolvedConstructor = this.injectionResolver.findResolvableConstructor(NoArgsConstructorClass::class)
+
+        assertNotNull(resolvedConstructor)
+        assertEquals(0, resolvedConstructor.parameters.size)
+        assertTrue(NoArgsConstructorClass::class.constructors.contains(resolvedConstructor))
+    }
+
+    /*@Test
+    fun `resolves simple dependency correctly without priming the type registry`() {
+        val resolvedConstructor = this.injectionResolver.findResolvableConstructor(ClassWithSimpleDependency::class)
+
+        this.beanFactory.createInstance(resolvedConstructor)
+
+        assertNotNull(resolvedConstructor)
+        assertEquals(0, resolvedConstructor.parameters.size)
+        assertTrue(NoArgsConstructorClass::class.constructors.contains(resolvedConstructor))
+    }*/
 
 }

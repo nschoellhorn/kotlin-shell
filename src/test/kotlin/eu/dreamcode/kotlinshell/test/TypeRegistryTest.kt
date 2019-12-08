@@ -4,7 +4,7 @@ import eu.dreamcode.kotlinshell.exception.InvalidSingletonException
 import eu.dreamcode.kotlinshell.inject.TypeRegistry
 import eu.dreamcode.kotlinshell.inject.isPrimitive
 import eu.dreamcode.kotlinshell.inject.isString
-import eu.dreamcode.kotlinshell.test.fixtures.SingletonFixture
+import eu.dreamcode.kotlinshell.test.fixtures.typeregistry.SingletonFixture
 import kotlin.test.*
 
 class TypeRegistryTest {
